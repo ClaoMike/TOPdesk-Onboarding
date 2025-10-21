@@ -1,0 +1,2 @@
+class UnparsableWebhook(Exception):
+    pass

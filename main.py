@@ -1,5 +1,8 @@
+from AzureWebhookParser import AzureWebhookParser
+
+parser = AzureWebhookParser()
 ###################### START OF SCRIPT ######################
-# change_id = parse_webhook_data()
+# change_id = parser.parse_webhook()
 change_id = "I 0000-0000"
 
 change_ticket = get_change_ticket(id=change_id)

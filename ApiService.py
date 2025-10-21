@@ -1,15 +1,21 @@
+from Singleton import Singleton
+
+import requests
+from requests.auth import HTTPBasicAuth
+
 class ApiService(Singleton):
     _topdesk_url = "https://dlfseeds.topdesk.net"
+    _authentication = HTTPBasicAuth(USERNAME, PASSWORD)
 
-    def get_change(name: str):
+    def get_change(self, name: str):
         headers = {
             "Content-Type": "application/json"
         }
 
         response = requests.get(
-            f"{TOPDESK_URL}/tas/api/operatorChanges/{name}",
+            f"{self._topdesk_url}/tas/api/operatorChanges/{name}",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD)
+            auth=self._authentication
         )
         # --- Handle response ---
         if response.status_code == 200:
@@ -18,15 +24,15 @@ class ApiService(Singleton):
             print("Failed to retrieve change:", response.status_code, response.text)
             return None
 
-    def get_change_request(endpoint: str):
+    def get_change_request(self, endpoint: str):
         headers = {
             "Content-Type": "application/json"
         }
 
         response = requests.get(
-            f"{TOPDESK_URL}{endpoint}",
+            f"{self._topdesk_url}{endpoint}",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD)
+            auth=self._authentication
         )
         # --- Handle response ---
         if response.status_code == 200:
@@ -35,15 +41,15 @@ class ApiService(Singleton):
             print("Failed to retrieve change:", response.status_code, response.text)
             return None
 
-    def lookup_manager(name: str):
+    def lookup_manager(self, name: str):
         headers = {
             "Content-Type": "application/json"
         }
 
         response = requests.get(
-            f"{TOPDESK_URL}/tas/api/persons/lookup?name={name}",
+            f"{self._topdesk_url}/tas/api/persons/lookup?name={name}",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD)
+            auth=self._authentication
         )
         # --- Handle response ---
         if response.status_code == 200:
@@ -52,7 +58,7 @@ class ApiService(Singleton):
             print("Failed to retrieve change:", response.status_code, response.text)
             return None
 
-    def reject_change(identifier: str, message: str):
+    def reject_change(self, identifier: str, message: str):
         default_message = "Please re-submit the form with valid data or contact Servicedesk!"
         joined_message = '\n'.join(message)
         joined_message += '\n\n' + default_message
@@ -76,9 +82,9 @@ class ApiService(Singleton):
         ]
 
         response = requests.patch(
-            f"{TOPDESK_URL}/tas/api/operatorChanges/{identifier}",
+            f"{self._topdesk_url}/tas/api/operatorChanges/{identifier}",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD),
+            auth=self._authentication,
             json=json
         )
         # --- Handle response ---
@@ -87,7 +93,7 @@ class ApiService(Singleton):
         else:
             print("Failed to retrieve change:", response.status_code, response.text)
 
-    def approve_change(identifier: str):
+    def approve_change(self, identifier: str):
         headers = {
             "Content-Type": "application/json-patch+json"
         }
@@ -102,9 +108,9 @@ class ApiService(Singleton):
         ]
 
         response = requests.patch(
-            f"{TOPDESK_URL}/tas/api/operatorChanges/{identifier}",
+            f"{self._topdesk_url}/tas/api/operatorChanges/{identifier}",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD),
+            auth=self._authentication,
             json=json
         )
         # --- Handle response ---
@@ -113,7 +119,7 @@ class ApiService(Singleton):
         else:
             print("Failed to retrieve change:", response.status_code, response.text)
 
-    def send_email(data: dict, details: dict):
+    def send_email(self, data: dict, details: dict):
         headers = {
             "Content-Type": "application/json"
         }
@@ -134,9 +140,9 @@ class ApiService(Singleton):
         }
 
         response = requests.post(
-            f"{TOPDESK_URL}/services/email-v1/api/send",
+            f"{self._topdesk_url}/services/email-v1/api/send",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD),
+            auth=self._authentication,
             json=json
         )
 
@@ -146,7 +152,7 @@ class ApiService(Singleton):
         else:
             print("Failed to send the email:", response.status_code, response.text)
 
-    def create_new_activity(change_name: str, activity_template_name: str, start_date: str, end_date: str,
+    def create_new_activity(self, change_name: str, activity_template_name: str, start_date: str, end_date: str,
                             request_description: str):
         headers = {
             "Content-Type": "application/json"
@@ -167,9 +173,9 @@ class ApiService(Singleton):
         }
 
         response = requests.post(
-            f"{TOPDESK_URL}/tas/api/operatorChangeActivities",
+            f"{self._topdesk_url}/tas/api/operatorChangeActivities",
             headers=headers,
-            auth=HTTPBasicAuth(USERNAME, PASSWORD),
+            auth=self._authentication,
             json=json
         )
         # --- Handle response ---
