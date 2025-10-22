@@ -71,6 +71,8 @@ class ChangeTicket:
                 matches_as_str = ", ".join(matches)
                 errors.append(f"Found multiple matches for the manager you submitted: {matches_as_str}")
 
+        # TODO: validate dates
+
         # reject if there are errors, approve otherwise
         if len(errors) > 0:
             error_message = "Please re-submit the form with valid data or contact Servicedesk!\n\n" + ", ".join(errors)
