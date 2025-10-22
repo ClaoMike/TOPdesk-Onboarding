@@ -1,17 +1,24 @@
 from AzureWebhookParser import AzureWebhookParser
+from Configuration import Configuration
+from ApiService import ApiService
 
-parser = AzureWebhookParser()
 ###################### START OF SCRIPT ######################
+parser = AzureWebhookParser()
 # change_id = parser.parse_webhook()
-change_id = "I 0000-0000"
 
-change_ticket = get_change_ticket(id=change_id)
-submitted_data = extract_data(change=change_ticket)
-is_valid_request, errors = validate_submitted_data(submitted_data) # validate the data
+change_id = "C 2510-0087"
 
-if is_valid_request:
-    approve_change(id=change_id)
-    create_activities(change_id=change_id, data=submitted_data)
-else:
-    reject_change(CHANGE_ID, errors)
+Configuration()
+apiService = ApiService()
+
+change_ticket = apiService.get_change(id=change_id)
+print(change_ticket)
+# submitted_data = extract_data(change=change_ticket)
+# is_valid_request, errors = validate_submitted_data(submitted_data) # validate the data
+#
+# if is_valid_request:
+#     approve_change(id=change_id)
+#     create_activities(change_id=change_id, data=submitted_data)
+# else:
+#     reject_change(CHANGE_ID, errors)
 ############################ END ############################
