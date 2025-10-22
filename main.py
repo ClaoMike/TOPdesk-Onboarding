@@ -1,6 +1,7 @@
 from AzureWebhookParser import AzureWebhookParser
 from Configuration import Configuration
 from ApiService import ApiService
+from ChangeTicket import ChangeTicket
 
 ###################### START OF SCRIPT ######################
 parser = AzureWebhookParser()
@@ -12,7 +13,8 @@ Configuration()
 apiService = ApiService()
 
 change_ticket = apiService.get_change(id=change_id)
-print(change_ticket)
+change_ticket = ChangeTicket(change_ticket)
+
 # submitted_data = extract_data(change=change_ticket)
 # is_valid_request, errors = validate_submitted_data(submitted_data) # validate the data
 #

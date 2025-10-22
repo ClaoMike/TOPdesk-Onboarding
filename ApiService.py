@@ -24,49 +24,32 @@ class ApiService(Singleton):
         # --- Handle response ---
         if response.status_code == 200:
             return response.json()
-        elif response.status_code == 400:
-            raise InvalidInputData(f"status: {response.status_code}, error: {response.text}")
-        elif response.status_code == 403:
-            raise NoPermission(f"status: {response.status_code}, error: {response.text}")
-        elif response.status_code == 404:
-            raise NotFound(f"status: {response.status_code}, error: {response.text}")
         else:
             raise Exception(f"status: {response.status_code}, error: {response.text}")
 
-    # def get_change_request(self, endpoint: str):
-    #     headers = {
-    #         "Content-Type": "application/json"
-    #     }
-    #
-    #     response = requests.get(
-    #         f"{self._topdesk_url}{endpoint}",
-    #         headers=headers,
-    #         auth=self._authentication
-    #     )
-    #     # --- Handle response ---
-    #     if response.status_code == 200:
-    #         return response.json()
-    #     else:
-    #         print("Failed to retrieve change:", response.status_code, response.text)
-    #         return None
-    #
-    # def lookup_manager(self, name: str):
-    #     headers = {
-    #         "Content-Type": "application/json"
-    #     }
-    #
-    #     response = requests.get(
-    #         f"{self._topdesk_url}/tas/api/persons/lookup?name={name}",
-    #         headers=headers,
-    #         auth=self._authentication
-    #     )
-    #     # --- Handle response ---
-    #     if response.status_code == 200:
-    #         return response.json()
-    #     else:
-    #         print("Failed to retrieve change:", response.status_code, response.text)
-    #         return None
-    #
+    def get_change_request(self, endpoint: str):
+        url = f"{self._topdesk_url}{endpoint}"
+        headers = { "Content-Type": "application/json" }
+
+        response = requests.get(url, headers=headers, auth=self._authentication)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(f"status: {response.status_code}, error: {response.text}")
+
+    def lookup_manager(self, name: str):
+        url = f"{self._topdesk_url}/tas/api/persons/lookup?name={name}"
+        headers = { "Content-Type": "application/json" }
+
+        response = requests.get(url, headers=headers, auth=self._authentication)
+
+        # --- Handle response ---
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(f"status: {response.status_code}, error: {response.text}")
+
     # def reject_change(self, identifier: str, message: str):
     #     default_message = "Please re-submit the form with valid data or contact Servicedesk!"
     #     joined_message = '\n'.join(message)
