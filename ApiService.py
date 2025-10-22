@@ -112,7 +112,6 @@ class ApiService(Singleton):
             #   "groupId": "a247jedd-69b7-4cbd-9dw1-af25h5g505fd1",
             #   "type": "operator"
             # },
-            # "status": "Planned",
             "request": request_description,
         }
 

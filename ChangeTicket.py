@@ -4,6 +4,7 @@ import phonenumbers
 from phonenumbers import NumberParseException
 from email_validator import validate_email, EmailNotValidError
 from typing import Callable, List, Tuple, Optional, Union
+from datetime import datetime, timezone, timedelta
 
 class ChangeTicket:
     def __init__(self, json_data: dict):
@@ -28,13 +29,13 @@ class ChangeTicket:
         self.email                      = request.get( 'Email' )
         self.personal_phone_number      = request.get( 'Personal phone number (Ex. +45xxxxxxxx)' )
         self.address                    = request.get( 'Address' )
-        self.date_of_birth              = request.get( 'Date of birth' )
+        self.date_of_birth              = self.convert_topdesk_date_to_datetime(request.get( 'Date of birth' ))
         self.cpr                        = request.get( 'CPR number' )
         self.department                 = request.get( 'Department' )
         self.employee_type              = request.get( 'Employee type' )
         self.job_title                  = request.get( 'Job title' )
-        self.start_date                 = request.get( 'Start date' )
-        self.end_date                   = request.get( 'End date' )
+        self.start_date                 = self.convert_topdesk_date_to_datetime(request.get( 'Start date' ))
+        self.end_date                   = self.convert_topdesk_date_to_datetime(request.get( 'End date' ))
         self.manager                    = request.get( 'Manager' )
         self.hire_reason                = request.get( 'Hire reason' )
         self.ORDER_HARDWARE             = request.get( 'Order hardware?' )
@@ -77,6 +78,12 @@ class ChangeTicket:
             raise Exception(error_message)
         else:
             ApiService().approve_change(self.id)
+
+    def convert_topdesk_date_to_datetime(self, dt: str):
+        if dt is None or dt == "":
+            return None
+        else:
+            return datetime.strptime(dt, "%B %d, %Y").date()
 
     def is_valid_email(self, email: str) -> bool:
         try:
