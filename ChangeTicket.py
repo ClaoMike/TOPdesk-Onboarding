@@ -50,16 +50,16 @@ class ChangeTicket:
         # validate
         errors = []
 
-        if not self.is_valid_email(self.ec_email):
+        if not self.is_valid_email(self.email):
             errors.append("Invalid email address.")
 
-        if not self.is_valid_phone_number(self.email):
+        if not self.is_valid_email(self.ec_email):
             errors.append("Invalid emergency contact email address.")
 
-        if not self.is_valid_email(self.personal_phone_number):
+        if not self.is_valid_phone_number(self.personal_phone_number):
             errors.append("Invalid phone number.")
 
-        if not self.is_valid_email(self.ec_personal_phone_number):
+        if not self.is_valid_phone_number(self.ec_personal_phone_number):
             errors.append("Invalid emergency contact phone number.")
 
         found, matches = self.is_valid_manager(self.manager)
@@ -71,7 +71,12 @@ class ChangeTicket:
                 errors.append(f"Found multiple matches for the manager you submitted: {matches_as_str}")
 
         # reject if there are errors, approve otherwise
-
+        if len(errors) > 0:
+            error_message = "Please re-submit the form with valid data or contact Servicedesk!\n\n" + ", ".join(errors)
+            ApiService().reject_change(self.id, error_message)
+            raise Exception(error_message)
+        else:
+            ApiService().approve_change(self.id)
 
     def is_valid_email(self, email: str) -> bool:
         try:
