@@ -1,10 +1,11 @@
+import change_validator
 from ApiService import ApiService
 
 import phonenumbers
 from phonenumbers import NumberParseException
 from email_validator import validate_email, EmailNotValidError
 from typing import Callable, List, Tuple, Optional, Union
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 
 class ChangeTicket:
     def __init__(self, json_data: dict):
@@ -48,30 +49,7 @@ class ChangeTicket:
         self.ec_email                   = request.get( '(EC) Email' )
         self.ec_personal_phone_number   = request.get( '(EC) Personal phone number (Ex. +45xxxxxxxx)' )
 
-        # validate
-        errors = []
-
-        if not self.is_valid_email(self.email):
-            errors.append("Invalid email address.")
-
-        if not self.is_valid_email(self.ec_email):
-            errors.append("Invalid emergency contact email address.")
-
-        if not self.is_valid_phone_number(self.personal_phone_number):
-            errors.append("Invalid phone number.")
-
-        if not self.is_valid_phone_number(self.ec_personal_phone_number):
-            errors.append("Invalid emergency contact phone number.")
-
-        found, matches = self.is_valid_manager(self.manager)
-        if not found:
-            if not matches:
-                errors.append("Manager not found.")
-            else:
-                matches_as_str = ", ".join(matches)
-                errors.append(f"Found multiple matches for the manager you submitted: {matches_as_str}")
-
-        # TODO: validate dates
+        errors = change_validator.validate(self)
 
         # reject if there are errors, approve otherwise
         if len(errors) > 0:
@@ -87,34 +65,6 @@ class ChangeTicket:
         else:
             return datetime.strptime(dt, "%B %d, %Y").date()
 
-    def is_valid_email(self, email: str) -> bool:
-        try:
-            validate_email(email, check_deliverability=False)  # Set to True if you want DNS checks
-            return True
-        except EmailNotValidError:
-            return False
-
-    def is_valid_phone_number(self, phone_raw: str):
-        # First try parsing with no region (only works if it starts with '+')
-        try:
-            number = phonenumbers.parse(phone_raw, None)
-            if phonenumbers.is_possible_number(number) and phonenumbers.is_valid_number(number):
-                return True
-        except NumberParseException:
-            pass
-
-        return False
-
-    def is_valid_manager(self, name: str) -> Tuple[bool, Union[dict, list, None]]:
-        results = ApiService().lookup_manager(name=name).get('results', [])
-
-        if len(results) == 1:
-            return True, results[0]
-        elif len(results) == 0:
-            return False, None
-        else:
-            return False, [r['name'] for r in results]
-
     def parse_memo_text_to_dict(self, memo_text: str) -> dict:
         # Split the text by <br/><br/>
         fields = memo_text.split('<br/><br/>')
@@ -128,4 +78,3 @@ class ChangeTicket:
                 value = parts[1].strip()
                 result[key] = value
         return result
-
