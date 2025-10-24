@@ -112,6 +112,7 @@ class ApiService(Singleton):
             #   "groupId": "a247jedd-69b7-4cbd-9dw1-af25h5g505fd1",
             #   "type": "operator"
             # },
+            "action": "Claudiu.Jechel@dlf.com",
             "request": request_description,
         }
 
@@ -142,3 +143,4 @@ class ApiService(Singleton):
             pass
         else:
             raise Exception(f"status: {response.status_code}, error: {response.text}")
+

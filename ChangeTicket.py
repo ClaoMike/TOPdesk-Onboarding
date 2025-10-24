@@ -1,11 +1,7 @@
 import change_validator
 from ApiService import ApiService
 
-import phonenumbers
-from phonenumbers import NumberParseException
-from email_validator import validate_email, EmailNotValidError
-from typing import Callable, List, Tuple, Optional, Union
-from datetime import datetime, timezone, timedelta, date
+from datetime import datetime
 
 class ChangeTicket:
     def __init__(self, json_data: dict):
@@ -52,12 +48,12 @@ class ChangeTicket:
         errors = change_validator.validate(self)
 
         # reject if there are errors, approve otherwise
-        if len(errors) > 0:
-            error_message = "Please re-submit the form with valid data or contact Servicedesk!\n\n" + ", ".join(errors)
-            ApiService().reject_change(self.id, error_message)
-            raise Exception(error_message)
-        else:
-            ApiService().approve_change(self.id)
+        # if len(errors) > 0:
+        #     error_message = "Please re-submit the form with valid data or contact Servicedesk!\n\n" + ", ".join(errors)
+        #     ApiService().reject_change(self.id, error_message)
+        #     raise Exception(error_message)
+        # else:
+        #     ApiService().approve_change(self.id)
 
     def convert_topdesk_date_to_datetime(self, dt: str):
         if dt is None or dt == "":
