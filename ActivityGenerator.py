@@ -21,31 +21,40 @@ class ActivityGenerator(Singleton):
             self.generate_reception_activity()
 
     def generate_manager_activity(self):
+        request_description = "testing features for now"
+        assignee = "Claudiu.Jechel@dlf.com"
+
         ApiService().create_new_activity(
-            self._current_change_ticket.id,
-            "AT-040",
-            str(date.today()),
-            str(self._current_change_ticket.start_date),
-            "testing features for now"
-            # request_description
+            change_name=self._current_change_ticket.id,
+            activity_template_name="AT-040",
+            start_date=str(date.today()),
+            end_date=str(self._current_change_ticket.start_date),
+            request_description=request_description,
+            assignee=assignee
         )
 
     def generate_payroll_activity(self):
+        request_description = f"Name: {self._current_change_ticket.fullname} \nCPR: {self._current_change_ticket.cpr}\nStart date: {self._current_change_ticket.start_date}"
+        assignee = "Claudiu.Jechel@dlf.com"
+
         ApiService().create_new_activity(
-            self._current_change_ticket.id,
-            "AT-041",
-            str(date.today()),
-            str(self._current_change_ticket.start_date),
-            "testing features for now"
-            # request_description
+            change_name=self._current_change_ticket.id,
+            activity_template_name="AT-041",
+            start_date=str(date.today()),
+            end_date=str(self._current_change_ticket.start_date),
+            request_description=request_description,
+            assignee=assignee
         )
 
     def generate_reception_activity(self):
+        request_description = f"Name: {self._current_change_ticket.fullname}\nStart date: {self._current_change_ticket.start_date}"
+        assignee = "Claudiu.Jechel@dlf.com"
+
         ApiService().create_new_activity(
-            self._current_change_ticket.id,
-            "AT-042",
-            str(date.today()),
-            str(self._current_change_ticket.start_date),
-            "testing features for now"
-            # request_description
+            change_name=self._current_change_ticket.id,
+            activity_template_name="AT-042",
+            start_date=str(date.today()),
+            end_date=str(self._current_change_ticket.start_date),
+            request_description=request_description,
+            assignee=assignee
         )
