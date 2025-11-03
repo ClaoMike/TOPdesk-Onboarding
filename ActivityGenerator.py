@@ -21,7 +21,20 @@ class ActivityGenerator(Singleton):
             self.generate_reception_activity()
 
     def generate_manager_activity(self):
-        request_description = "testing features for now"
+        request_description = f"""
+            Name: {self._current_change_ticket.fullname}\n
+            Email: {self._current_change_ticket.email}\n
+            Personal phone number: {self._current_change_ticket.personal_phone_number}\n
+            Address: {self._current_change_ticket.address}\n
+            Date of birth: {self._current_change_ticket.date_of_birth}\n
+            Department: {self._current_change_ticket.department}\n
+            Employee type: {self._current_change_ticket.employee_type}\n
+            Job title: {self._current_change_ticket.job_title}\n
+            Start date: {self._current_change_ticket.start_date}\n
+            End date: {self._current_change_ticket.end_date}\n
+            Hire reason: {self._current_change_ticket.hire_reason}\n
+        """
+
         assignee = "Claudiu.Jechel@dlf.com"
 
         ApiService().create_new_activity(
@@ -58,3 +71,4 @@ class ActivityGenerator(Singleton):
             request_description=request_description,
             assignee=assignee
         )
+

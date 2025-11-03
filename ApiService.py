@@ -124,24 +124,3 @@ class ApiService(Singleton):
             pass
         else:
             raise Exception(f"status: {response.status_code}, error: {response.text}")
-
-    # def send_email(self, recipient, cc, message):
-    #     url = f"{self._topdesk_url}/services/email-v1/api/send"
-    #     headers = { "Content-Type": "application/json" }
-    #     json = {
-    #         "from": "servicedesk@dlf.com",
-    #         "to": recipient,
-    #         "cc": cc,
-    #         "subject": "New employee",
-    #         "body": message,
-    #         "isHtmlBody": "true"
-    #     }
-    #
-    #     response = requests.post(url, headers=headers, auth=self._authentication, json=json)
-    #
-    #     # --- Handle response ---
-    #     if response.status_code == 202:
-    #         pass
-    #     else:
-    #         raise Exception(f"status: {response.status_code}, error: {response.text}")
-
