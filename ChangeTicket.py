@@ -1,6 +1,5 @@
-import change_validator
 from ApiService import ApiService
-
+from ChangeValidator import ChangeValidator
 from datetime import datetime
 
 class ChangeTicket:
@@ -42,7 +41,7 @@ class ChangeTicket:
         self.ec_email                   = request.get( '(EC) Email' )
         self.ec_personal_phone_number   = request.get( '(EC) Personal phone number (Ex. +45xxxxxxxx)' )
 
-        errors = change_validator.validate(self)
+        errors = ChangeValidator().validate(change_ticket=self)
 
         self.as_dictionary = request
         self.as_dictionary['Number'] = self.id
