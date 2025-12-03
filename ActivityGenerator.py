@@ -1,13 +1,14 @@
 from ChangeTicket import ChangeTicket
 from ApiService import ApiService
 from datetime import date
+from OnboardingSettings import OnboardingSettings
 
 class ActivityGenerator():
     def generate_activities_for_change(self, change_ticket: ChangeTicket):
-        asset = ApiService().get_asset(id="625d58ac-8042-4478-93cf-a72b02336896") # asset that contains the settings
+        templates = OnboardingSettings().get_activities_for_change_template(change_ticket.template_number)
 
-        for entry in  asset.get("data").get("@gridwidgetfield_00a6f1d9-1a29-4c45-9994-70ee3dc3b5aa"):
-            settings = ApiService().get_asset(id=entry) #  DK entry
+        for template in templates:
+            settings = ApiService().get_asset(id=template) #  DK entry
 
             request_description = ""
             fields = settings.get("data").get("fields-1").split("\n")

@@ -6,10 +6,11 @@ from datetime import datetime
 class ChangeTicket:
     def __init__(self, json_data: dict):
         # extract required data
-        self.id         = json_data.get('number')
-        self.requester  = json_data.get('requester').get('name')
-        self.branch     = json_data.get('branch').get('name')
-        self.location   = json_data.get('location').get('name')
+        self.id             = json_data.get('number')
+        self.requester      = json_data.get('requester').get('name')
+        self.branch         = json_data.get('branch').get('name')
+        self.location       = json_data.get('location').get('name')
+        self.template_number = self.get_number_of_template_with_id(json_data.get('templateId'))
 
         results = ApiService().get_change_request(endpoint=json_data.get('requests')).get('results')
 
@@ -35,11 +36,6 @@ class ChangeTicket:
         self.end_date                   = self.convert_topdesk_date_to_datetime(request.get( 'End date' ))
         self.manager                    = request.get( 'Manager' )
         self.hire_reason                = request.get( 'Hire reason' )
-        # TBR
-        # self.ORDER_HARDWARE             = request.get( 'Order hardware?' )
-        # self.DESCRIBE                   = request.get( 'Describe' )
-        # self.ORDER_MASTERCARD           = request.get( 'Order Mastercard?' )
-        # self.ORDER_COMPANY_VEHICLE      = request.get( 'Order company vehicle?' )
         self.ORDER_ACCESS_KEYS          = request.get( 'Order access keys?' )
         self.ORDER_WELCOME_PRESENT      = request.get( 'Order welcome present?' )
         self.ec_fullname                = request.get( '(EC) Full name' )
@@ -53,6 +49,7 @@ class ChangeTicket:
         self.as_dictionary['Requester'] = self.requester
         self.as_dictionary['Branch'] = self.branch
         self.as_dictionary['Location'] = self.location
+        self.as_dictionary['Template Number'] = self.template_number
 
         # reject if there are errors, approve otherwise
         # if len(errors) > 0:
@@ -81,3 +78,10 @@ class ChangeTicket:
                 value = parts[1].strip()
                 result[key] = value
         return result
+
+    def get_number_of_template_with_id(self, template_id):
+        all_available_templates = ApiService().get_change_templates().get("results")
+        for template in all_available_templates:
+            if template.get('id') == template_id:
+                return template.get('number')
+        return None

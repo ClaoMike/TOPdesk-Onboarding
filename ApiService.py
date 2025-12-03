@@ -121,8 +121,19 @@ class ApiService(Singleton):
             raise Exception(f"status: {response.status_code}, error: {response.text}")
 
     def get_asset(self, id: str):
-        # 625d58ac-8042-4478-93cf-a72b02336896
         url = f"{self._topdesk_url}/tas/api/assetmgmt/assets/{id}"
+        headers = { "Content-Type": "application/json" }
+
+        response = requests.get(url, headers=headers, auth=self._authentication)
+
+        # --- Handle response ---
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(f"status: {response.status_code}, error: {response.text}")
+
+    def get_change_templates(self):
+        url = f"{self._topdesk_url}/tas/api/applicableChangeTemplates"
         headers = { "Content-Type": "application/json" }
 
         response = requests.get(url, headers=headers, auth=self._authentication)
