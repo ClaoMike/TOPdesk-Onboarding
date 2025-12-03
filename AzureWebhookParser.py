@@ -1,4 +1,3 @@
-from Exceptions import UnparsableWebhook
 from Singleton import Singleton
 
 import sys
@@ -14,4 +13,4 @@ class AzureWebhookParser(Singleton):
         if match:
             return match.group(0).strip('"')
         else:
-            raise UnparsableWebhook("The change id cannot be read from the passed webhook body.")
+            raise Exception("The change id cannot be read from the passed webhook body.")
