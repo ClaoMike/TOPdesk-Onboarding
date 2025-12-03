@@ -14,6 +14,7 @@ class ActivityGenerator(Singleton):
 
         self.generate_manager_activity()
         self.generate_payroll_activity()
+        self.generate_heidi_christiansen()
 
         if self._current_change_ticket.ORDER_ACCESS_KEYS is not None and self._current_change_ticket.ORDER_ACCESS_KEYS == "Yes":
             self.generate_reception_activity()
@@ -59,6 +60,19 @@ class ActivityGenerator(Singleton):
 
     def generate_reception_activity(self):
         request_description = f"Name: {self._current_change_ticket.fullname}\nStart date: {self._current_change_ticket.start_date}"
+        assignee = "Claudiu.Jechel@dlf.com"
+
+        ApiService().create_new_activity(
+            change_name=self._current_change_ticket.id,
+            activity_template_name="AT-042",
+            start_date=str(date.today()),
+            end_date=str(self._current_change_ticket.start_date),
+            request_description=request_description,
+            assignee=assignee
+        )
+
+    def generate_heidi_christiansen(self):
+        request_description = f"Name: {self._current_change_ticket.fullname}\nEnd date: {self._current_change_ticket.end_date}"
         assignee = "Claudiu.Jechel@dlf.com"
 
         ApiService().create_new_activity(
