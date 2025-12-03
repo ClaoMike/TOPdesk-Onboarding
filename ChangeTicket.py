@@ -48,6 +48,12 @@ class ChangeTicket:
 
         errors = change_validator.validate(self)
 
+        self.as_dictionary = request
+        self.as_dictionary['Number'] = self.id
+        self.as_dictionary['Requester'] = self.requester
+        self.as_dictionary['Branch'] = self.branch
+        self.as_dictionary['Location'] = self.location
+
         # reject if there are errors, approve otherwise
         # if len(errors) > 0:
         #     error_message = "Please re-submit the form with valid data or contact Servicedesk!\n\n" + ", ".join(errors)
