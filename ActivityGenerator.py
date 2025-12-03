@@ -4,12 +4,10 @@ from ApiService import ApiService
 from datetime import date
 
 class ActivityGenerator(Singleton):
-    _initialized = False
     _current_change_ticket = None
 
-    def __init__(self):
-        if not self._initialized:
-            _initialized = True
+    def _init_singleton(self):
+        pass
 
     def generate_activities_for_change(self, change_ticket: ChangeTicket):
         self._current_change_ticket = change_ticket

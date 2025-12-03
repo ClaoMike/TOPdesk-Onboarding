@@ -5,6 +5,9 @@ import sys
 import re
 
 class AzureWebhookParser(Singleton):
+    def _init_singleton(self):
+        pass
+
     def parse_webhook(self):
         raw = ' '.join(sys.argv[4:])
         match = re.search(r'"?C\s\d{4}-\d{4}"?', raw)

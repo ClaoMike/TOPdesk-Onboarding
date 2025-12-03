@@ -6,13 +6,9 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 class ApiService(Singleton):
-    _initialized = False
-
     _topdesk_url = "https://dlfseeds.topdesk.net"
 
-    def __init__(self):
-        if not self._initialized:
-            _initialized = True
+    def _init_singleton(self):
             self._authentication = HTTPBasicAuth(Configuration().USERNAME, Configuration().PASSWORD)
 
     def get_change(self, id: str):
