@@ -12,41 +12,42 @@ class ChangeValidator():
         errors = []
 
         # validate personal email address
-        if not self.is_valid_email(change_ticket.email):
+        if change_ticket.email is not None and not self.is_valid_email(change_ticket.email):
             errors.append("Invalid email address.")
 
         # validate emergency contact personal email address
-        if not self.is_valid_email(change_ticket.ec_email):
+        if change_ticket.ec_email is not None and not self.is_valid_email(change_ticket.ec_email):
             errors.append("Invalid emergency contact email address.")
 
         # validate personal phone number
-        if not self.is_valid_phone_number(change_ticket.personal_phone_number):
+        if change_ticket.personal_phone_number is not None and not self.is_valid_phone_number(change_ticket.personal_phone_number):
             errors.append("Invalid phone number.")
 
         # validate emergency contact personal phone number
-        if not self.is_valid_phone_number(change_ticket.ec_personal_phone_number):
+        if change_ticket.ec_personal_phone_number is not None and not self.is_valid_phone_number(change_ticket.ec_personal_phone_number):
             errors.append("Invalid emergency contact phone number.")
 
         # validate if the supplied manager exists and it is unique
-        found, matches = self.is_valid_manager(change_ticket.manager)
-        if not found:
-            if not matches:
-                errors.append("Manager not found.")
-            else:
-                matches_as_str = ", ".join(matches)
-                errors.append(f"Found multiple matches for the manager you submitted: {matches_as_str}")
+        if change_ticket.manager is not None:
+            found, matches = self.is_valid_manager(change_ticket.manager)
+            if not found:
+                if not matches:
+                    errors.append("Manager not found.")
+                else:
+                    matches_as_str = ", ".join(matches)
+                    errors.append(f"Found multiple matches for the manager you submitted: {matches_as_str}")
 
         today = date.today()
         # validate date of birth is less than today
-        if change_ticket.date_of_birth >= today:
+        if change_ticket.date_of_birth is not None and change_ticket.date_of_birth >= today:
             errors.append("Employee's birth date cannot be in the future.")
 
         # validate start date is at least today
-        if change_ticket.start_date < today:
+        if change_ticket.start_date is not None and change_ticket.start_date < today:
             errors.append("Start date cannot be in the past.")
 
         # validate end date is at least start date, if it exists at all
-        if change_ticket.end_date is not None and change_ticket.end_date < change_ticket.start_date:
+        if change_ticket.end_date is not None and change_ticket.end_date is not None and change_ticket.end_date < change_ticket.start_date:
             errors.append("End date cannot be before the start date.")
 
         return errors
@@ -58,7 +59,6 @@ class ChangeValidator():
         except EmailNotValidError:
             return False
 
-
     def is_valid_phone_number(self, phone_raw: str):
         # First try parsing with no region (only works if it starts with '+')
         try:
@@ -69,7 +69,6 @@ class ChangeValidator():
             pass
 
         return False
-
 
     def is_valid_manager(self, name: str) -> Tuple[bool, Union[dict, list, None]]:
         results = ApiService().lookup_manager(name=name).get('results', [])

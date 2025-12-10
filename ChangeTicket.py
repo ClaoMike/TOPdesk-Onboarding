@@ -22,22 +22,12 @@ class ChangeTicket:
 
         request = self.parse_memo_text_to_dict(request)
 
-        self.fullname                   = request.get( 'Full name' )
         self.email                      = request.get( 'Email' )
         self.personal_phone_number      = request.get( 'Personal phone number (Ex. +45xxxxxxxx)' )
-        self.address                    = request.get( 'Address' )
         self.date_of_birth              = self.convert_topdesk_date_to_datetime(request.get( 'Date of birth' ))
-        self.cpr                        = request.get( 'CPR number' )
-        self.department                 = request.get( 'Department' )
-        self.employee_type              = request.get( 'Employee type' )
-        self.job_title                  = request.get( 'Job title' )
         self.start_date                 = self.convert_topdesk_date_to_datetime(request.get( 'Start date' ))
         self.end_date                   = self.convert_topdesk_date_to_datetime(request.get( 'End date' ))
         self.manager                    = request.get( 'Manager' )
-        self.hire_reason                = request.get( 'Hire reason' )
-        self.ORDER_ACCESS_KEYS          = request.get( 'Order access keys?' )
-        self.ORDER_WELCOME_PRESENT      = request.get( 'Order welcome present?' )
-        self.ec_fullname                = request.get( '(EC) Full name' )
         self.ec_email                   = request.get( '(EC) Email' )
         self.ec_personal_phone_number   = request.get( '(EC) Personal phone number (Ex. +45xxxxxxxx)' )
 
