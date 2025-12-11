@@ -1,14 +1,14 @@
 from ApiService import ApiService
 from ChangeValidator import ChangeValidator
-from datetime import datetime
+from datetime import datetime, date
 
 class ChangeTicket:
     def __init__(self, json_data: dict):
         # extract required data
         self.id             = json_data.get('number')
         self.requester      = json_data.get('requester').get('name')
-        self.branch         = json_data.get('branch').get('name')
-        self.location       = json_data.get('location').get('name')
+        self.branch = (json_data.get('branch') or {}).get('name')
+        self.location = (json_data.get('location') or {}).get('name')
         self.template_number = self.get_number_of_template_with_id(json_data.get('templateId'))
 
         results = ApiService().get_change_request(endpoint=json_data.get('requests')).get('results')
@@ -39,6 +39,10 @@ class ChangeTicket:
         self.as_dictionary['Branch'] = self.branch
         self.as_dictionary['Location'] = self.location
         self.as_dictionary['Template Number'] = self.template_number
+
+        # set these as today's date if they are empty
+        self.start_date = self.start_date or str(date.today())
+        self.end_date = self.end_date or str(date.today())
 
         # reject if there are errors, approve otherwise
         # if len(errors) > 0:
