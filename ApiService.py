@@ -116,7 +116,7 @@ class ApiService(Singleton):
 
         # --- Handle response ---
         if response.status_code > 200 and response.status_code < 300:
-            pass
+            return response.json()
         else:
             raise Exception(f"status: {response.status_code}, error: {response.text}")
 
@@ -141,5 +141,43 @@ class ApiService(Singleton):
         # --- Handle response ---
         if response.status_code == 200:
             return response.json()
+        else:
+            raise Exception(f"status: {response.status_code}, error: {response.text}")
+
+    def close_change(self, id: str):
+        url = f"{self._topdesk_url}/tas/api/operatorChanges/{id}"
+        headers = { "Content-Type": "application/json-patch+json" }
+        json = [
+            {
+                "op": "replace",
+                "path": "/status",
+                "value": "Closed"
+            }
+        ]
+
+        response = requests.patch(url, headers=headers, auth=self._authentication, json=json)
+
+        # --- Handle response ---
+        if response.status_code > 200 and response.status_code < 300:
+            pass
+        else:
+            raise Exception(f"status: {response.status_code}, error: {response.text}")
+
+    def solve_activity(self, id: str):
+        url = f"{self._topdesk_url}/tas/api/operatorChangeActivities/{id}"
+        headers = { "Content-Type": "application/json-patch+json" }
+        json = [
+            {
+                "op": "replace",
+                "path": "/status",
+                "value": "solved"
+            }
+        ]
+
+        response = requests.patch(url, headers=headers, auth=self._authentication, json=json)
+
+        # --- Handle response ---
+        if response.status_code > 200 and response.status_code < 300:
+            pass
         else:
             raise Exception(f"status: {response.status_code}, error: {response.text}")

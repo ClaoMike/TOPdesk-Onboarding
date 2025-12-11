@@ -8,7 +8,7 @@ from ActivityGenerator import ActivityGenerator
 parser = AzureWebhookParser()
 # change_id = parser.parse_webhook()
 
-change_id = "C 2512-0043"
+change_id = "C 2512-0051"
 
 Configuration()
 apiService = ApiService()
@@ -18,5 +18,5 @@ change_ticket = ChangeTicket(change_ticket)
 
 # should no Exceptions be raised until this point, the change must be approved and ready to be processed
 ActivityGenerator().generate_activities_for_change(change_ticket)
-
+apiService.close_change(change_id)
 ############################ END ############################

@@ -15,7 +15,7 @@ class ActivityGenerator():
             for field in fields:
                 request_description += f"{field}: {change_ticket.as_dictionary.get(field)}\n"
 
-            ApiService().create_new_activity(
+            activity = ApiService().create_new_activity(
                 change_name=change_ticket.id,
                 activity_template_name=settings.get("data").get("activity-template"),
                 start_date=str(date.today()),
@@ -23,3 +23,5 @@ class ActivityGenerator():
                 request_description=request_description,
                 assignee=settings.get("data").get("receiver-s-email")
             )
+
+            ApiService().solve_activity(activity.get("id"))
